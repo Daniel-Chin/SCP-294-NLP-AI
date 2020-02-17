@@ -1,0 +1,13 @@
+SCP 294
+http://www.scp-wiki.net/scp-294
+
+def likelihoodToDie(drink):
+  given = f'I drank {drink}, so I'
+  indexed_tokens = tokenizer.encode(given)
+  tokens_tensor = torch.tensor(indexed_tokens).to('cuda')
+  word_index = tokenizer.encode(' died')[0]
+  with torch.no_grad():
+    outputs = model(tokens_tensor)
+    predictions = outputs[0][-1,:]
+  distribution = torch.nn.functional.softmax(predictions, dim=0).cpu().numpy()
+  return distribution[word_index]
